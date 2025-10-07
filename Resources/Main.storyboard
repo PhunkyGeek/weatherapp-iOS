@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard" version="3.0" toolsVersion="18104" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="TabBarControllerID">
+    <scenes>
+        <!-- Tab Bar Controller -->
+        <scene sceneID="TabBarSceneID">
+            <objects>
+                <tabBarController id="TabBarControllerID" customClass="UITabBarController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBar key="tabBar" id="TabBarID">
+                        <items>
+                            <tabBarItem id="HomeItem" title="Home" />
+                            <tabBarItem id="FavItem" title="Favorites" />
+                            <tabBarItem id="MapItem" title="Map" />
+                            <tabBarItem id="SettingsItem" title="Settings" />
+                        </items>
+                    </tabBar>
+                    <connections>
+                        <segue destination="HomeVCScene" kind="relationship" relationship="viewControllers" id="TabToHome" />
+                        <segue destination="FavVCScene" kind="relationship" relationship="viewControllers" id="TabToFav" />
+                        <segue destination="MapVCScene" kind="relationship" relationship="viewControllers" id="TabToMap" />
+                        <segue destination="SettingsVCScene" kind="relationship" relationship="viewControllers" id="TabToSettings" />
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P-Tab" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!-- Home Scene -->
+        <scene sceneID="HomeVCScene">
+            <objects>
+                <viewController id="HomeVC" customClass="HomeViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HomeView">
+                        <rect key="frame" x="0" y="0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Home" id="HomeTabBarItem" />
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P-Home" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!-- Favourites Scene -->
+        <scene sceneID="FavVCScene">
+            <objects>
+                <viewController id="FavVC" customClass="FavoritesViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FavView">
+                        <rect key="frame" x="0" y="0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Favorites" id="FavTabBarItem" />
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P-Fav" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!-- Map Scene -->
+        <scene sceneID="MapVCScene">
+            <objects>
+                <viewController id="MapVC" customClass="MapViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MapView">
+                        <rect key="frame" x="0" y="0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Map" id="MapTabBarItem" />
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P-Map" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+        <!-- Settings Scene -->
+        <scene sceneID="SettingsVCScene">
+            <objects>
+                <viewController id="SettingsVC" customClass="SettingsViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SettingsView">
+                        <rect key="frame" x="0" y="0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Settings" id="SettingsTabBarItem" />
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P-Settings" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
