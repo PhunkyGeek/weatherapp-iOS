@@ -8,29 +8,67 @@ on:
 
 jobs:
   build:
+    name: Build & Test WeatherApp (iOS)
     runs-on: macos-latest
+    timeout-minutes: 30
+
     steps:
+      # --- Step 1: Checkout repository ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up latest Xcode
-        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      # --- Step 2: Set up latest Xcode ---
+      - name: Select latest Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
 
+      # --- Step 3: Cache DerivedData to speed up builds ---
+      - name: Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-xcode-${{ hashFiles('**/*.xcodeproj/**') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode-
+
+      # --- Step 4: Resolve Swift Package Dependencies ---
       - name: Resolve Swift Packages
-        run: xcodebuild -resolvePackageDependencies -project WeatherApp.xcodeproj
+        run: |
+          echo "Resolving Swift package dependencies..."
+          xcodebuild -resolvePackageDependencies \
+            -project WeatherApp.xcodeproj
 
+      # --- Step 5: Build for iOS Simulator ---
       - name: Build WeatherApp
         run: |
+          echo "Building WeatherApp for iOS Simulator..."
           xcodebuild \
+            -project WeatherApp.xcodeproj \
             -scheme WeatherApp \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
-            clean build CODE_SIGNING_ALLOWED=NO
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build | xcpretty
 
+      # --- Step 6: Run Unit Tests on Simulator ---
       - name: Run Unit Tests
         run: |
+          echo "Running unit tests..."
           xcodebuild \
-            test \
+            -project WeatherApp.xcodeproj \
             -scheme WeatherApp \
+            -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.5' \
-            CODE_SIGNING_ALLOWED=NO
+            test \
+            CODE_SIGNING_ALLOWED=NO | xcpretty && exit ${PIPESTATUS[0]}
+
+      # --- Step 7: Archive Build Artifacts ---
+      - name: Archive build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: WeatherApp-Simulator-Build
+          path: |
+            build/Debug-iphonesimulator/*.app
