@@ -1,6 +1,6 @@
 workflows:
   ios-weatherapp:
-    name: iOS WeatherApp Local Build
+    name: iOS WeatherApp Unsigned Build
     max_build_duration: 60
     instance_type: mac_mini_m2
 
@@ -9,10 +9,10 @@ workflows:
       vars:
         XCODE_PROJECT: "WeatherApp.xcodeproj"
         XCODE_SCHEME: "WeatherApp"
-        BUNDLE_ID: "com.example.weatherapp" # Replace with your bundle ID
-      ios_signing:
-        provisioning_profiles:
-          - WeatherApp_Dev_Profile        # Upload this profile in Codemagic
+        BUNDLE_ID: "com.example.weatherapp"
+
+      # ✅ Disable signing entirely
+      ios_signing: null
 
     triggering:
       events:
@@ -29,23 +29,34 @@ workflows:
           cd $CM_BUILD_DIR
           agvtool new-version -all $(($BUILD_NUMBER + 1))
 
-      - name: Build WeatherApp
+      - name: Build for iOS Simulator (No Signing)
         script: |
-          echo "Building .xcarchive..."
+          echo "Building for simulator..."
           xcodebuild \
             -project "$XCODE_PROJECT" \
             -scheme "$XCODE_SCHEME" \
-            -archivePath "$CM_BUILD_DIR/build/WeatherApp.xcarchive" \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
+
+      - name: Archive Unsigned Build
+        script: |
+          echo "Archiving unsigned build..."
+          mkdir -p $CM_BUILD_DIR/build/unsigned
+          xcodebuild \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
             -configuration Release \
-            clean archive \
-            DEVELOPMENT_TEAM="$CM_DEVELOPER_TEAM" \
-            CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="WeatherApp_Dev_Profile"
+            -archivePath "$CM_BUILD_DIR/build/WeatherApp.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            clean archive
 
-      - name: Export unsigned .ipa
+      - name: Export Unsigned .ipa
         script: |
-          echo "Exporting .ipa file..."
+          echo "Exporting unsigned .ipa..."
           mkdir -p $CM_BUILD_DIR/build/ipa
           xcodebuild -exportArchive \
             -archivePath "$CM_BUILD_DIR/build/WeatherApp.xcarchive" \
@@ -54,13 +65,14 @@ workflows:
               "method": "development",
               "signingStyle": "manual",
               "compileBitcode": false,
-              "destination": "export",
               "stripSwiftSymbols": true,
+              "destination": "export",
               "thinning": "<none>"
             }
           EOF
           ) \
-          -exportPath "$CM_BUILD_DIR/build/ipa"
+          -exportPath "$CM_BUILD_DIR/build/ipa" \
+          CODE_SIGNING_ALLOWED=NO
 
     artifacts:
       - build/ipa/*.ipa
