@@ -29,17 +29,17 @@ workflows:
       #     cd $CM_BUILD_DIR
       #     agvtool new-version -all $(($BUILD_NUMBER + 1))
 
-      # - name: Build for iOS Simulator (No Signing)
-      #   script: |
-      #     echo "Building for simulator..."
-      #     xcodebuild \
-      #       -project "$XCODE_PROJECT" \
-      #       -scheme "$XCODE_SCHEME" \
-      #       -sdk iphonesimulator \
-      #       -configuration Debug \
-      #       -destination 'platform=iOS Simulator,name=iPhone 15' \
-      #       CODE_SIGNING_ALLOWED=NO \
-      #       clean build
+      - name: Build for iOS Simulator (No Signing)
+        script: |
+          echo "Building for simulator..."
+          xcodebuild \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            CODE_SIGNING_ALLOWED=NO \
+            clean build
 
       - name: Archive Unsigned Build
         script: |
