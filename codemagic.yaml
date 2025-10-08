@@ -11,8 +11,6 @@ workflows:
         XCODE_SCHEME: "WeatherApp"
         BUNDLE_ID: "com.example.weatherapp" # Replace with your bundle ID
       ios_signing:
-        distribution_type: development    # Use development or ad-hoc for local builds
-        bundle_identifier: $BUNDLE_ID
         provisioning_profiles:
           - WeatherApp_Dev_Profile        # Upload this profile in Codemagic
 
