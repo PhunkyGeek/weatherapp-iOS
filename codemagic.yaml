@@ -23,11 +23,11 @@ workflows:
           source: true
 
     scripts:
-      - name: Set build number
-        script: |
-          echo "Updating build number..."
-          cd $CM_BUILD_DIR
-          agvtool new-version -all $(($BUILD_NUMBER + 1))
+      # - name: Set build number
+      #   script: |
+      #     echo "Updating build number..."
+      #     cd $CM_BUILD_DIR
+      #     agvtool new-version -all $(($BUILD_NUMBER + 1))
 
       - name: Build for iOS Simulator (No Signing)
         script: |
